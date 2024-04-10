@@ -24,13 +24,15 @@ app.post("/contact", async (req, res) => {
   const { nombre, email, mensaje, asunto } = req.body;
 
   if ([nombre, email, mensaje, asunto].some(field => field.trim() === "")) {
-    return res.json("Hay campos vacíos");
+    return res.status(401).json({
+      msg: "Hay campos vacíos",
+    });
   }
 
   if (mensaje.length <= 6) {
-    return res
-      .status(400)
-      .json({ error: "El mensaje debe tener más de 6 caracteres" });
+    return res.status(401).json({
+      msg: "El mensaje debe incluir más de 6 caracteres",
+    });
   }
 
   const transport = nodemailer.createTransport({
