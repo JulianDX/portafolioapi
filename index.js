@@ -13,7 +13,7 @@ app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
 
-const dominiosPermitidos = [process.env.URL_FRONTEND];
+const dominiosPermitidos = ["https://julianroapalacio.vercel.app/"];
 
 const corsOptions = {
   origin: (origin, callback) => {
