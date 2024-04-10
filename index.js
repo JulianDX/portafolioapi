@@ -1,16 +1,16 @@
-import express from "express";
-import cors from "cors";
-import dotenv from "dotenv";
-import nodemailer from "nodemailer";
+const express = require("express");
+const cors = require("cors");
+const dotenv = require("dotenv");
+const nodemailer = require("nodemailer");
 
 const app = express();
 app.use(express.json());
 dotenv.config();
 
-const port = process.env.PORT;
+const port = process.env.PORT || 4000;
 
-app.listen(port || 4000, () => {
-  console.log("Server running on port 4000");
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
 });
 
 const dominiosPermitidos = [process.env.URL_FRONTEND];
@@ -34,8 +34,10 @@ app.post("/contact", async (req, res) => {
     return res.status(400).json({ error: "Hay campos vacíos" });
   }
 
-  if(mensaje.length <=6 ){
-    return res.status(400).json({ error: "El mensaje debe tener más de 6 caracteres" });
+  if (mensaje.length <= 6) {
+    return res
+      .status(400)
+      .json({ error: "El mensaje debe tener más de 6 caracteres" });
   }
 
   const transport = nodemailer.createTransport({
@@ -64,4 +66,4 @@ app.post("/contact", async (req, res) => {
   res.json("Correo enviado exitosamente");
 });
 
-export default app;
+module.exports = app;
