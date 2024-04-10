@@ -13,26 +13,9 @@ app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
 
-const dominiosPermitidos = ["https://julianroapalacio.vercel.app/"];
+const dominiosPermitidos = ["https://julianroapalacio.vercel.app"];
 
-const corsOptions = {
-  origin: (origin, callback) => {
-    if (dominiosPermitidos.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-};
-
-app.use(cors(corsOptions));
-
-app.options("/contact", (req, res) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "POST");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-  res.status(200).send();
-});
+app.use(cors()); // Habilitar CORS para todas las rutas
 
 app.post("/contact", async (req, res) => {
   const { nombre, email, mensaje, asunto } = req.body;
@@ -71,7 +54,10 @@ app.post("/contact", async (req, res) => {
       `,
     });
     
-    res.setHeader('Access-Control-Allow-Origin', '*'); // Establece el encabezado Access-Control-Allow-Origin para permitir solicitudes desde cualquier origen.
+    // Configurar los encabezados CORS
+    res.setHeader('Access-Control-Allow-Origin', '*'); // Permitir solicitudes desde cualquier origen
+    res.setHeader('Access-Control-Allow-Methods', 'POST'); // Permitir solicitudes POST
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type'); // Permitir el encabezado Content-Type
     res.json("Correo enviado exitosamente");
   } catch (error) {
     console.error("Error al enviar el correo:", error);
