@@ -13,7 +13,7 @@ app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
 
-const dominiosPermitidos = [process.env.URL_FRONTEND];
+const dominiosPermitidos = ["https://julianroapalacio.vercel.app/"];
 
 const corsOptions = {
   origin: (origin, callback) => {
@@ -26,6 +26,13 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+
+app.options("/contact", (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  res.status(200).send();
+});
 
 app.post("/contact", async (req, res) => {
   const { nombre, email, mensaje, asunto } = req.body;
