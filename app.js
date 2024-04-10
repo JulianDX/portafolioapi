@@ -13,9 +13,12 @@ app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
 
-const dominiosPermitidos = ["https://julianroapalacio.vercel.app"];
+// Configuración de CORS para permitir solo solicitudes desde tu frontend
+const corsOptions = {
+  origin: "https://julianroapalacio.vercel.app",
+};
 
-app.use(cors()); // Habilitar CORS para todas las rutas
+app.use(cors(corsOptions));
 
 app.post("/contact", async (req, res) => {
   const { nombre, email, mensaje, asunto } = req.body;
@@ -53,11 +56,7 @@ app.post("/contact", async (req, res) => {
       <p>El motivo de mi mensaje es: ${mensaje}</p>
       `,
     });
-    
-    // Configurar los encabezados CORS
-    res.setHeader('Access-Control-Allow-Origin', '*'); // Permitir solicitudes desde cualquier origen
-    res.setHeader('Access-Control-Allow-Methods', 'POST'); // Permitir solicitudes POST
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type'); // Permitir el encabezado Content-Type
+
     res.json("Correo enviado exitosamente");
   } catch (error) {
     console.error("Error al enviar el correo:", error);
