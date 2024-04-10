@@ -13,7 +13,7 @@ app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
 
-const dominiosPermitidos = ["https://julianroapalacio.vercel.app/"];
+const dominiosPermitidos = [process.env.URL_FRONTEND];
 
 const corsOptions = {
   origin: (origin, callback) => {
@@ -50,20 +50,26 @@ app.post("/contact", async (req, res) => {
     },
   });
 
-  // Enviar el email
-  await transport.sendMail({
-    from: `"Portafolio" <${email}>`,
-    to: process.env.EMAIL_MYEMAIL,
-    subject: asunto,
-    text: `Hola Julián, mi nombre es: ${nombre} si quieres contactarme mi correo es: ${email}. Motivo del mensaje: ${mensaje}`,
-    html: `<p>Hola Julián</p> 
-    <p>Mi nombre es: ${nombre}</p>
-    <p>Si gustas contactarme, mi correo es: ${email}</p>
-    <p>El motivo de mi mensaje es: ${mensaje}</p>
-    `,
-  });
-
-  res.json("Correo enviado exitosamente");
+  try {
+    // Enviar el email
+    await transport.sendMail({
+      from: `"Portafolio" <${email}>`,
+      to: process.env.EMAIL_MYEMAIL,
+      subject: asunto,
+      text: `Hola Julián, mi nombre es: ${nombre} si quieres contactarme mi correo es: ${email}. Motivo del mensaje: ${mensaje}`,
+      html: `<p>Hola Julián</p> 
+      <p>Mi nombre es: ${nombre}</p>
+      <p>Si gustas contactarme, mi correo es: ${email}</p>
+      <p>El motivo de mi mensaje es: ${mensaje}</p>
+      `,
+    });
+    
+    res.setHeader('Access-Control-Allow-Origin', '*'); // Establece el encabezado Access-Control-Allow-Origin para permitir solicitudes desde cualquier origen.
+    res.json("Correo enviado exitosamente");
+  } catch (error) {
+    console.error("Error al enviar el correo:", error);
+    res.status(500).json({ error: "Ocurrió un error al enviar el correo" });
+  }
 });
 
 module.exports = app;
