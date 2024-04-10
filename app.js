@@ -23,8 +23,8 @@ app.use(cors(corsOptions));
 app.post("/contact", async (req, res) => {
   const { nombre, email, mensaje, asunto } = req.body;
 
-  if ([nombre, email, mensaje, asunto].includes("")) {
-    return res.status(400).json({ error: "Hay campos vacíos" });
+  if ([nombre, email, mensaje, asunto].some(field => field.trim() === "")) {
+    return res.json("Hay campos vacíos");
   }
 
   if (mensaje.length <= 6) {
