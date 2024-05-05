@@ -29,9 +29,9 @@ app.post("/contact", async (req, res) => {
     });
   }
 
-  if (mensaje.length <= 6) {
+  if (mensaje.length <= 30) {
     return res.status(401).json({
-      msg: "El mensaje debe incluir más de 6 caracteres",
+      msg: "El mensaje debe incluir más de 30 caracteres",
     });
   }
 
